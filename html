@@ -1,0 +1,162 @@
+<!-- wp:html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body.custom-body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .custom-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h2.custom-title {
+            margin-bottom: 20px;
+        }
+        button.custom-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button.custom-button:hover {
+            background-color: #45a049;
+        }
+        .modal {display: none; position: fixed; top: 0; right: 0; bottom: 0; left: 0; text-align: left; background: rgba(0, 0, 0, .9); transition: opacity .25s ease; z-index: 999}
+        .Popup_button {cursor: pointer}
+        .Popup_bg {position: absolute; top: 0; right: 0; bottom: 0; left: 0; cursor: pointer}
+        .at-pop {display: none}
+        .Popup_inner {transition: top .25s ease; position: absolute; top: -20%; right: 0; bottom: 0; left: 0; width: 50%; margin: auto; overflow: auto; background: #fff; border-radius: 5px; padding: 1em 2em; height: 50%}
+        .pop__close {position: absolute; right: 1em; top: 1em; width: 1.1em; height: 1.1em; cursor: pointer}
+        .pop__close:after, .pop__close:before {position: absolute; width: 2px; height: 1.5em; background: #333; display: block; transform: rotate(45deg); left: 50%; margin: -3px 0 0 -1px; top: 0}
+        .pop__close:hover:after, .pop__close:hover:before {background: #aaa}
+        .pop__close:before {transform: rotate(-45deg)}
+        @media screen and (max-width: 768px) {.Popup_inner {width: 90%; box-sizing: border-box}}
+        .pop-heading {height: 40px; width: 100%; border-bottom: 1px #e5e5e5 solid}
+        .adhtml {margin: 14px 0 4px; min-height: 260px}
+        .popup_ad_container {height: 330px}
+        .pop_final_btn {line-height: 16px; margin: 15px; font-size: 19px; text-align: center; position: relative}
+        .Popup_button {display: block; height: 40px; color: #fff; font-size: 20px; text-transform: uppercase; background: #c44341; text-align: center; line-height: 40px; width: 200px; margin: auto; transition: all .4s ease-in; cursor: pointer; align-items: center}
+        .pop-heading h2 {margin: 0}
+        .loading-icon {
+            border: 16px solid #f3f3f3;
+            border-top: 16px solid #3498db;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+    <script>
+        function getTelegramLink() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    if (response.status === 'success') {
+                        // Redirect to Telegram link
+                        window.location.href = response.link;
+                    } else {
+                        alert("Error: " + response.message);
+                    }
+                }
+            };
+            // Replace this URL with your Google Apps Script URL
+            xhttp.open("GET", "https://script.google.com/macros/s/AKfycbzEucEbh_rNsn6yvAXeoFYM-i8fgk6ZSwNifE1my06TfDaiGOZxDVKdiNCGP_718sz5VA/exec", true);
+            xhttp.send();
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.querySelector("#Popup_Back");
+            const btn = document.querySelectorAll(".Popup_button");
+            const closeModal = document.getElementsByClassName("pop_btnclose")[0];
+            const telegramButton = document.getElementById("K_download");
+
+            for (let i = 0; i < btn.length; i++) {
+                btn[i].addEventListener("click", function() {
+                    modal.style.display = "block";
+                    startTimer();
+                });
+            }
+
+            closeModal.onclick = function() {
+                modal.style.display = "none";
+            };
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+
+            function startTimer() {
+                const loader = document.querySelector(".loading-icon");
+                loader.style.display = "block";
+                telegramButton.style.display = "none";
+
+                let secondsLeft = 15;
+
+                const timerInterval = setInterval(() => {
+                    secondsLeft--;
+                    if (secondsLeft === 0) {
+                        clearInterval(timerInterval);
+                        loader.style.display = "none";
+                        telegramButton.style.display = "block";
+                    }
+                }, 1000);
+            }
+
+            telegramButton.onclick = function() {
+                getTelegramLink();
+            };
+        });
+    </script>
+</head>
+<body class="custom-body">
+    <div class="Popup_button" id="Popup_button">Download PDF</div>
+    <div class="modal" id="Popup_Back">
+        <div class="Popup_bg"></div>
+        <div class="Popup_inner">
+            <div class="pop-heading">
+                <label class="pop__close pop_btnclose">
+                    <svg style="height: 25px; width: 25px; fill: black;" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M278.6 256l68.2-68.2c6.2-6.2 6.2-16.4 0-22.6-6.2-6.2-16.4-6.2-22.6 0L256 233.4l-68.2-68.2c-6.2-6.2-16.4-6.2-22.6 0-3.1 3.1-4.7 7.2-4.7 11.3 0 4.1 1.6 8.2 4.7 11.3l68.2 68.2-68.2 68.2c-3.1 3.1-4.7 7.2-4.7 11.3 0 4.1 1.6 8.2 4.7 11.3 6.2 6.2 16.4 6.2 22.6 0l68.2-68.2 68.2 68.2c6.2 6.2 16.4 6.2 22.6 0 6.2-6.2 6.2-16.4 0-22.6L278.6 256z"></path>
+                    </svg>
+                </label>
+                <h2 style="margin: 0px;">Download PDF</h2>
+            </div>
+            <div class="loading-icon"></div>
+<br>
+            <button class="custom-button" id="K_download" style="display: none;">Download Now</button>
+            <div class="popup_ad_container">
+                <div class="adhtml">
+                    <ins class="adsbygoogle" data-ad-client="ca-pub-xxxxxxxxxxxx" data-ad-format="auto" data-ad-slot="xxxxxxxxxxx" data-full-width-responsive="true" style="display: block;"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<!-- /wp:html -->
